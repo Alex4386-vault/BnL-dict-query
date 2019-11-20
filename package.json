@@ -2,7 +2,7 @@
   "name": "BnL-dict-query",
   "version": "0.0.1",
   "main": "dist/",
-  "repository": "git@github.com:Alex4386/BnL-dict-query.git",
+  "repository": "https://github.com/Alex4386/BnL-dict-query.git",
   "author": "psh010209 <psh010209@gmail.com>",
   "license": "MIT",
   "dependencies": {
