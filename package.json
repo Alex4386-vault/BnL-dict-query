@@ -6,10 +6,12 @@
   "author": "psh010209 <psh010209@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "jsdom": "^15.2.1",
     "request": "^2.88.0",
     "typescript": "^3.7.2"
   },
   "devDependencies": {
+    "@types/jsdom": "^12.2.4",
     "@types/request": "^2.48.3"
   },
   "scripts": {
