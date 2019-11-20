@@ -2,9 +2,17 @@ import request from "request";
 import { userAgentString, stripHtmlTags } from "../common";
 import { JSDOM } from "jsdom";
 
+// Debug only
+import util from "util";
+
 interface Word {
     word: string;
-    definitions: Array<string[]>
+    definitions: Definition[];
+}
+
+interface Definition {
+    main: string;
+    sub: string[];
 }
 
 export function dictionaryQuery(word){
@@ -37,17 +45,31 @@ export function dictionaryQuery(word){
                 const dictEntries = Array.from(defWrap.getElementsByClassName("vg")[0].getElementsByClassName("sb"));
                 const definitions = [];
                 for (let dictEntry of dictEntries) {
-                    let entryDefinitions = [];
+                    let entryMainDefinition = undefined;
+                    let entrySubDefinitions = [];
                     for (let meaningEntry of Array.from(dictEntry.getElementsByClassName("sense"))) {
                         for (let examples of Array.from(meaningEntry.getElementsByClassName("ex-sent"))) {
                             examples.remove();
                         }
+
                         let o = stripHtmlTags(meaningEntry.getElementsByClassName("dtText")[0].innerHTML).replace(/(\t|\n)/g,"").trim()
-                        if (/^( )+$/.test(o)) { continue; }
+                        if (meaningEntry.getElementsByClassName("sl").length != 0) {
+                            o = stripHtmlTags(meaningEntry.getElementsByClassName("sl")[0].innerHTML) + o;
+                        } else {
+                            if (/^( )+$/.test(o)) { continue; }
+                        }
                         o = o.replace(/^: /, "");
-                        entryDefinitions.push(o);
+                        if (meaningEntry.classList.contains("has-num-only")) {
+                            entryMainDefinition = o;
+                        } else {
+                            entrySubDefinitions.push(o);
+                        }
+                        
                     }
-                    definitions.push(entryDefinitions);
+                    definitions.push({
+                        main: entryMainDefinition,
+                        sub: entrySubDefinitions
+                    } as Definition);
                 }
 
 
@@ -56,7 +78,7 @@ export function dictionaryQuery(word){
                     definitions
                 };
 
-                console.log(word);
+                console.log(util.inspect(word, false, null, true));
             }
         }
     });
