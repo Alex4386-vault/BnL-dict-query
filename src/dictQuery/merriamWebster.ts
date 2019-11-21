@@ -27,6 +27,8 @@ export function dictionaryQuery(word): Promise<Word[]> {
 
                 console.log(lengthWords);
 
+                let prevPronunciation = "";
+
                 for (let i = 0; i < lengthWords; i++) {
                     const current = defWrap.getElementsByClassName("entry-header")[i];
                     const theWord = stripHtmlTags(current.getElementsByClassName("hword")[0].innerHTML);
@@ -38,16 +40,32 @@ export function dictionaryQuery(word): Promise<Word[]> {
 
 
                     let tempPronunciation = "";
+
+                    if (i < defWrap.getElementsByClassName("entry-attr").length) {
+                        const currentAttr = defWrap.getElementsByClassName("entry-attr")[i];
                 
-                    Array.from(current.getElementsByClassName("prs")).map( (a) => {
-                        tempPronunciation += stripHtmlTags(a.innerHTML).replace(/\\/g, "");
-                    });
+                        Array.from(currentAttr.getElementsByClassName("prs")).map( (a) => {
+                            tempPronunciation += stripHtmlTags(a.innerHTML).replace(/\\/g, "").replace(/\|/,"").replace(/\s{2,}/,"");
+                        });
+                    }
+                    
+
+                    
+
+                    if (tempPronunciation.replace(/\s/,"") === "") {
+                        tempPronunciation = prevPronunciation;
+                    }
 
                     const pronunciation = tempPronunciation.trim();
 
+                    prevPronunciation = pronunciation;
+
+
+
+
                     let syllables = "";
                     Array.from(current.getElementsByClassName("word-syllables")).map( (a) => {
-                        tempPronunciation += stripHtmlTags(a.innerHTML)
+                        syllables += stripHtmlTags(a.innerHTML)
                     });
 
 
