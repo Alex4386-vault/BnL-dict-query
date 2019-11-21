@@ -1,7 +1,8 @@
 import fs from "fs";
-import { dictionaryQuery } from "./dictQuery";
+import { dictionaryQuery } from "./dictQuery/merriamWebster";
 import { ConfigInterface } from "./interface/configInterface";
 import util from "util";
+import { searchDictionary, dictionaryQueryViaWordId } from "./dictQuery/naver";
 
 const query = JSON.parse(fs.readFileSync("query/query.json").toString()) as ConfigInterface;
 
@@ -12,6 +13,7 @@ if (query.sortMe) {
 
 console.log(query.queries);
 
+/*
 let i = 0;
 
 for (let i = 0; i < query.queries.length; i++) {
@@ -21,3 +23,16 @@ for (let i = 0; i < query.queries.length; i++) {
   }, 1000*i);
 
 }
+*/
+
+searchDictionary("face").then(
+  (wordId) => {
+    dictionaryQueryViaWordId(wordId).then(
+      (wa) => {
+        for (const waa in wa) {
+          console.log(util.inspect(wa, false, null, true));
+        }
+      }
+    )
+  }
+)
