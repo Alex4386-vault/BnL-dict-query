@@ -7,6 +7,7 @@ import util from "util";
 
 interface Word {
     word: string;
+    pronunciation: string;
     definitions: Definition[];
 }
 
@@ -29,7 +30,7 @@ export function dictionaryQuery(word){
             const defWrap = document.getElementById("definition-wrapper");
             const wordHeaders = defWrap.getElementsByClassName("anchor-name");
             const lengthWords = wordHeaders.length;
-            const pronounciation = stripHtmlTags(defWrap.getElementsByClassName("prs").innerHTML);
+            const pronunciation = stripHtmlTags(defWrap.getElementsByClassName("prs")[0].innerHTML);
             console.log(lengthWords);
 
             for (let i = 0; i < lengthWords; i++) {
@@ -75,6 +76,7 @@ export function dictionaryQuery(word){
 
                 const word: Word = {
                     word: theWord,
+                    pronunciation,
                     definitions
                 };
 
