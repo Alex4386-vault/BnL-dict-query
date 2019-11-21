@@ -29,7 +29,7 @@ export function dictionaryQuery(word){
             const defWrap = document.getElementById("definition-wrapper");
             const wordHeaders = defWrap.getElementsByClassName("anchor-name");
             const lengthWords = wordHeaders.length;
-
+            const pronounciation = stripHtmlTags(defWrap.getElementsByClassName("prs").innerHTML);
             console.log(lengthWords);
 
             for (let i = 0; i < lengthWords; i++) {
